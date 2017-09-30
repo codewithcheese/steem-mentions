@@ -1,12 +1,9 @@
 import os
 import re
 import json
-import csv
 import pandas
-import traceback
 import pymongo
 import tldextract
-from steem import Steem
 from constants import (MONGO_URL_DATA_FILE_PATH, MONGO_URL_COLUMNS, MONGO_POSITION_FILE_PATH, MONGO_CONNECTION,
                         MONGO_DATABASE, MONGO_POSTS_TABLE)
 
