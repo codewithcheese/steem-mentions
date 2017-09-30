@@ -52,19 +52,22 @@ for author in author_list:
         print("Processing %s" % author)
         # get account data
         account = accounts.find_one({'name': author})
-        # update author data frame
-        entry = {
-            'name': account['name'],
-            'created': account['created'],
-            'last_vote_time': account['last_vote_time'],
-            'last_post': account['last_post'],
-            'reputation': account['reputation'],
-            'total_steem': account['balances']['total']['STEEM'],
-            'total_sbd': account['balances']['total']['SBD'],
-            'total_vests': account['balances']['total']['VESTS']
-        }
-        author_writer.writerow(entry)
-        author_file.flush()
+        if account:
+            # update author data frame
+            entry = {
+                'name': account['name'],
+                'created': account['created'],
+                'last_vote_time': account['last_vote_time'],
+                'last_post': account['last_post'],
+                'reputation': account['reputation'],
+                'total_steem': account['balances']['total']['STEEM'],
+                'total_sbd': account['balances']['total']['SBD'],
+                'total_vests': account['balances']['total']['VESTS']
+            }
+            author_writer.writerow(entry)
+            author_file.flush()
+        else:
+            print("Account %s not found." % author)
         known_author_table[author] = True
     else:
         print('%s known' % author)
