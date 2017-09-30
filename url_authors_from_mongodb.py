@@ -1,6 +1,7 @@
 import os
 import pandas
 import pymongo
+import csv
 from constants import (
     MONGO_URL_DATA_FILE_PATH, AUTHOR_DATA_FILE_PATH, AUTHOR_COLUMNS,
     MONGO_CONNECTION, MONGO_ACCOUNTS_TABLE, MONGO_DATABASE)
@@ -15,24 +16,39 @@ accounts = db[MONGO_ACCOUNTS_TABLE]
 if not os.path.exists(MONGO_URL_DATA_FILE_PATH):
     raise Exception('Url data most exist before running this script.')
 
-url_data = pandas.DataFrame.from_csv(MONGO_URL_DATA_FILE_PATH)
+url_file = open(MONGO_URL_DATA_FILE_PATH, 'r')
+url_csv = csv.DictReader(url_file)
 
-# load author data
-if os.path.exists(AUTHOR_DATA_FILE_PATH):
-    author_data = pandas.DataFrame.from_csv(AUTHOR_DATA_FILE_PATH)
+author_table = dict()
+
+for row in url_csv:
+    author_table[row['author']] = True
+
+# list of all authors to know
+author_list = [item[0] for item in author_table.items()]
+
+print('%s url authors' % len(author_list))
+
+known_author_table = dict()
+
+# initialize writer
+if not os.path.exists(AUTHOR_DATA_FILE_PATH):
+    author_file = open(AUTHOR_DATA_FILE_PATH, 'w')
+    author_writer = csv.DictWriter(author_file, fieldnames=AUTHOR_COLUMNS)
+    author_writer.writeheader()
 else:
-    author_data = pandas.DataFrame(columns=AUTHOR_COLUMNS)
+    with open(AUTHOR_DATA_FILE_PATH, 'r') as author_file:
+        author_reader = csv.DictReader(author_file)
+        for row in author_reader:
+            known_author_table[row['name']] = True
 
-# create unique authors table for faster lookups
-know_author_list = author_data['name'].unique()
-know_author_table = dict()
-for author in know_author_list:
-    know_author_table[author] = True
+    author_file = open(AUTHOR_DATA_FILE_PATH, 'a')
+    author_writer = csv.DictWriter(author_file, fieldnames=AUTHOR_COLUMNS)
 
-author_list = url_data['author'].unique()
-# for each unknown author
+# for each author
 for author in author_list:
-    if author not in know_author_table:
+    # if unknown
+    if author not in known_author_table:
         print("Processing %s" % author)
         # get account data
         account = accounts.find_one({'name': author})
@@ -47,8 +63,9 @@ for author in author_list:
             'total_sbd': account['balances']['total']['SBD'],
             'total_vests': account['balances']['total']['VESTS']
         }
-        author_data.loc[len(author_data)] = entry
-        # save updated author data
-        author_data.to_csv(AUTHOR_DATA_FILE_PATH, columns=AUTHOR_COLUMNS)
-        know_author_table[author] = True
+        author_writer.writerow(entry)
+        author_file.flush()
+        known_author_table[author] = True
+    else:
+        print('%s known' % author)
 
