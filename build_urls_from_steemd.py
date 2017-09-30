@@ -45,7 +45,7 @@ def process_blocks(blocks):
                         host_name = '%s%s.%s' % (
                         host_parts.subdomain + '.' if host_parts.subdomain else '', host_parts.domain,
                         host_parts.suffix)
-                        domain = '%s.%s' % (host_parts.domain, host_part)
+                        domain = '%s.%s' % (host_parts.domain, host_parts.suffix)
 
                         entry = dict(
                             block_num=block['block_num'],
