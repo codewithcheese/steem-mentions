@@ -43,6 +43,8 @@ def process_post(post):
                 domain = '%s.%s' % (host_parts.domain, host_parts.suffix)
                 entry = dict(
                     id=post['id'],
+                    net_votes=post['net_votes'],
+                    total_payout_value=post['total_payout_value']['amount'],
                     url=url,
                     host_name=host_name,
                     domain=domain,

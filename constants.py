@@ -15,7 +15,7 @@ STEEMD_URL_DATA_FILE_PATH = os.path.join(os.path.dirname(__file__), './data/stee
 STEEMD_URL_COLUMNS = ['block_num', 'block_id', 'transaction_id', 'url', 'host_name', 'domain', 'author', 'parent_author', 'parent_permlink', 'permlink']
 
 MONGO_URL_DATA_FILE_PATH = os.path.join(os.path.dirname(__file__), './data/mongo_url_list.csv')
-MONGO_URL_COLUMNS = ['id', 'url', 'host_name', 'domain', 'author', 'parent_author', 'parent_permlink', 'permlink']
+MONGO_URL_COLUMNS = ['id', 'net_votes', 'total_payout_value', 'url', 'host_name', 'domain', 'author', 'parent_author', 'parent_permlink', 'permlink']
 
 # author data
 AUTHOR_DATA_FILE_PATH = os.path.join(os.path.dirname(__file__), './data/authors.csv')
