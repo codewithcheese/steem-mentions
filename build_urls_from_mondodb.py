@@ -42,6 +42,7 @@ def process_post(post):
                     id=post['id'],
                     net_votes=post['net_votes'],
                     total_payout_value=post['total_payout_value']['amount'],
+                    created=post['created'],
                     url=url,
                     host_name=host_name,
                     domain=domain,
