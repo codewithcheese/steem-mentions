@@ -1,4 +1,4 @@
 steem==0.18.93
 pandas==0.20.3
 pymongo==3.5.1
-tldextract=2.1.0
+tldextract==2.1.0
