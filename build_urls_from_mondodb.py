@@ -34,7 +34,7 @@ def process_post(post):
     global url_data
     url_table = dict()
     if not post['body'][0: 2] == '@@':
-        urls = re.findall(r"(?P<url>https?://[^\s\]\)]+)", post['body'])
+        urls = re.findall(r"(?P<url>https?://[^\s\]\)\"]+)", post['body'])
         for url in urls:
             if url not in url_table: # only unique urls per post
                 url_table[url] = True
